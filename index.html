@@ -22,22 +22,47 @@ let config = {
 let game = new Phaser.Game(config);
 
 let rect;
-let rect_dir = 1;
+let rect_dir = 5;
+let flechas;
 
 function precarga () {
 
 }
 
 function crea () {
-	rect = this.add.rectangle(400, 225, 32, 32, 0xffffff);
+//se crea cuadrado
+	rect = this.add.rectangle(400, 225, 32, 32, 0xffffff); 
+	
+//se indica que flechas es un input del teclado
+	flechas = this.input.keyboard.createCursorKeys(); 
 }
 
 function actualiza () {
+//tecla pulsada entonces cambio de dirección de rect en x y y - if
+	if(flechas.left.isDown) {
+		rect.x -= rect_dir;
+	}
+	if(flechas.right.isDown) {
+		rect.x += rect_dir;
+	}
+	if(flechas.up.isDown) {
+		rect.y -= rect_dir;
+	}
+	if(flechas.down.isDown) {
+		rect.y += rect_dir;
+	}
+	
+	if (rect.x < 0) rect.x = 0;
+	if (rect.x > canvas_w) rect.x = canvas_w;
+	if (rect.y < 0) rect.y = 0;
+	if (rect.y > canvas_y) rect.y = canvas_y;
+	
+/*rebote de izquierda a derecha - if
 	rect.x += rect_dir;
 
 	if (rect.x <= 0 || rect.x >= canvas_w){
 		rect_dir = -rect_dir;
-	}
+	}*/
 }
 		</script>
 	</head>
