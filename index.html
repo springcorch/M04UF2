@@ -42,13 +42,13 @@ function actualiza () {
 	if(flechas.left.isDown) {
 		rect.x -= rect_dir;
 	}
-	if(flechas.right.isDown) {
+	else if(flechas.right.isDown) {
 		rect.x += rect_dir;
 	}
 	if(flechas.up.isDown) {
 		rect.y -= rect_dir;
 	}
-	if(flechas.down.isDown) {
+	else if(flechas.down.isDown) {
 		rect.y += rect_dir;
 	}
 	
