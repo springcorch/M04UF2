@@ -30,6 +30,9 @@ let huevo_b, huevo_m, huevo_d;
 
 function precarga () {
 	this.load.image('huevo', 'graficos/huevo.png');
+
+	this.load.image('huevo_b', 'graficos/huevo_b.png');
+
 	this.load.image('huevera', 'graficos/huevera.png');
 }
 
@@ -40,28 +43,27 @@ function crea () {
 //hueveras crear
 	huevera_b = this.add.image(400, 160, 'huevera');
 	huevera_b.setScale(.1);
-	huevera_b.setTint (Phaser.Display.Color.GetColor (255, 0, 0));
-	
+
 	huevera_m = this.add.image(300, 160, 'huevera');
 	huevera_m.setScale(.1);
-	huevera_m.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
+	huevera_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
 	
 	huevera_d = this.add.image(200, 160, 'huevera');
 	huevera_d.setScale(.1);
-	huevera_d.setTint (Phaser.Display.Color.GetColor (0, 0, 255));
+	huevera_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
 
 //huevos crear
-	huevo_b = this.add.image(400, 200, 'huevo');
+	huevo_b = this.add.image(400, 200, 'huevo_b');
 	huevo_b.setScale(.5);
 	huevo_b.setTint (Phaser.Display.Color.GetColor (255, 255, 255));
 	
 	huevo_m = this.add.image(300, 200, 'huevo');
 	huevo_m.setScale(.5);
-	huevo_m.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
+	huevo_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
 	
 	huevo_d = this.add.image(200, 200, 'huevo');
 	huevo_d.setScale(.5);
-	huevo_d.setTint (Phaser.Display.Color.GetColor (0, 0, 255));
+	huevo_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
 
 //se indica que flechas es un input del teclado
 	flechas = this.input.keyboard.createCursorKeys(); 
