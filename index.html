@@ -25,6 +25,8 @@ let rect;
 let rect_dir = 5;
 let flechas;
 
+let huevera_b, huevera_m, huevera_d;
+
 function precarga () {
 	this.load.image('huevo', 'graficos/huevo.png');
 	this.load.image('huevera', 'graficos/huevera.png');
@@ -35,7 +37,8 @@ function precarga () {
 function crea () {
 //se crea cuadrado
 	rect = this.add.rectangle(400, 225, 32, 32, 0xffffff);
-	this.add.image(400, 160, 'huevera');
+	huevera_b = this.add.image(400, 160, 'huevera');
+	huevera_b.setScale(.5);
 	
 //se indica que flechas es un input del teclado
 	flechas = this.input.keyboard.createCursorKeys(); 
