@@ -21,9 +21,9 @@ let config = {
 
 let game = new Phaser.Game(config);
 
-let rect;
-let rect_dir = 5;
-let flechas;
+//let rect;
+//let rect_dir = 5;
+//let flechas;
 
 let huevera_b, huevera_m, huevera_d;
 let huevo_b, huevo_m, huevo_d;
@@ -41,31 +41,43 @@ function crea () {
 	//rect = this.add.rectangle(400, 225, 32, 32, 0xffffff);
 	
 //hueveras crear
-	huevera_b = this.add.image(400, 160, 'huevera');
+	huevera_b = this.add.image(100, 337, 'huevera');
 	huevera_b.setScale(.1);
 
-	huevera_m = this.add.image(300, 160, 'huevera');
+	huevera_m = this.add.image(100, 225, 'huevera');
 	huevera_m.setScale(.1);
 	huevera_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
 	
-	huevera_d = this.add.image(200, 160, 'huevera');
+	huevera_d = this.add.image(100, 112, 'huevera');
 	huevera_d.setScale(.1);
 	huevera_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
 
 //huevos crear
-	huevo_b = this.add.image(400, 200, 'huevo_b');
+	huevo_b = this.add.image(700, 50, 'huevo_b');
 	huevo_b.setScale(.5);
+	huevo_b.setInteractive();
 	
-	huevo_m = this.add.image(300, 200, 'huevo_b');
+	huevo_m = this.add.image(500, 50, 'huevo_b');
 	huevo_m.setScale(.5);
 	huevo_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
+	huevo_m.setInteractive();
 	
-	huevo_d = this.add.image(200, 200, 'huevo_b');
+	
+	huevo_d = this.add.image(300, 50, 'huevo_b');
 	huevo_d.setScale(.5);
 	huevo_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
+	huevo_d.setInteractive();
+	
+//Interaccion huevos
+	[huevo_b, huevo_m, huevo_d].forEach((huevo) => {
+		huevo.on("pointerdown", () => {
+			console.log(`Clicado huevo de color`);
+		});
+	});
+
 
 //se indica que flechas es un input del teclado
-	flechas = this.input.keyboard.createCursorKeys(); 
+//	flechas = this.input.keyboard.createCursorKeys(); 
 }
 
 function actualiza () {
