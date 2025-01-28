@@ -29,7 +29,7 @@ let huevera_b, huevera_m, huevera_d;
 let huevo_b, huevo_m, huevo_d;
 
 function precarga () {
-	this.load.image('huevo', 'graficos/huevo.png');
+	//this.load.image('huevo', 'graficos/huevo.png');
 
 	this.load.image('huevo_b', 'graficos/huevo_b.png');
 
@@ -38,7 +38,7 @@ function precarga () {
 
 function crea () {
 //se crea cuadrado
-	rect = this.add.rectangle(400, 225, 32, 32, 0xffffff);
+	//rect = this.add.rectangle(400, 225, 32, 32, 0xffffff);
 	
 //hueveras crear
 	huevera_b = this.add.image(400, 160, 'huevera');
@@ -56,11 +56,11 @@ function crea () {
 	huevo_b = this.add.image(400, 200, 'huevo_b');
 	huevo_b.setScale(.5);
 	
-	huevo_m = this.add.image(300, 200, 'huevo');
+	huevo_m = this.add.image(300, 200, 'huevo_b');
 	huevo_m.setScale(.5);
 	huevo_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
 	
-	huevo_d = this.add.image(200, 200, 'huevo');
+	huevo_d = this.add.image(200, 200, 'huevo_b');
 	huevo_d.setScale(.5);
 	huevo_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
 
@@ -69,7 +69,7 @@ function crea () {
 }
 
 function actualiza () {
-//tecla pulsada entonces cambio de dirección de rect en x y y - if
+/*tecla pulsada entonces cambio de dirección de rect en x y y - if
 	if(flechas.left.isDown) {
 		rect.x -= rect_dir;
 	}
@@ -86,7 +86,7 @@ function actualiza () {
 	if (rect.x < 0) rect.x = 0;
 	if (rect.x > canvas_w) rect.x = canvas_w;
 	if (rect.y < 0) rect.y = 0;
-	if (rect.y > canvas_y) rect.y = canvas_y;
+	if (rect.y > canvas_y) rect.y = canvas_y;*/
 	
 /*rebote de izquierda a derecha - if
 	rect.x += rect_dir;
