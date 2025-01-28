@@ -26,10 +26,13 @@ let game = new Phaser.Game(config);
 //let flechas;
 
 let huevera_b, huevera_m, huevera_d;
-let huevo_b, huevo_m, huevo_d;
+let huevo_b, huevo_m, huevo_d; 
 
 function precarga () {
 	//this.load.image('huevo', 'graficos/huevo.png');
+
+	this.load.image('fondo', 'graficos/cespedVerde.jpg');
+	this.load.image('fondoHuevera', 'graficos/pajaSeca.jpg');
 
 	this.load.image('huevo_b', 'graficos/huevo_b.png');
 
@@ -39,7 +42,7 @@ function precarga () {
 function crea () {
 //se crea cuadrado
 	//rect = this.add.rectangle(400, 225, 32, 32, 0xffffff);
-	
+
 //hueveras crear
 	huevera_b = this.add.image(100, 337, 'huevera');
 	huevera_b.setScale(.1);
