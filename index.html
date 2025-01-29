@@ -26,7 +26,9 @@ let game = new Phaser.Game(config);
 //let flechas;
 
 let huevera_b, huevera_m, huevera_d;
-let huevo_b, huevo_m, huevo_d; 
+let huevo_b, huevo_m, huevo_d;
+
+let canvas_bg;
 
 let H_scale = .5;
 let HV_scale = .1;
@@ -35,7 +37,6 @@ function precarga () {
 	//this.load.image('huevo', 'graficos/huevo.png');
 
 	this.load.image('fondo', 'graficos/cespedVerde.jpg');
-	this.load.image('fondoHuevera', 'graficos/pajaSeca.jpg');
 
 	this.load.image('huevo_b', 'graficos/huevo_b.png');
 
@@ -47,7 +48,7 @@ function crea () {
 	//rect = this.add.rectangle(400, 225, 32, 32, 0xffffff);
 
 //fondo crear
-	this.add.image(canvas_w/2, canvas_y/2, 'fondo');
+	canvas_bg = this.add.image(canvas_w/2, canvas_y/2, 'fondo');
 
 //hueveras crear
 	huevera_b = this.add.image(100, 337, 'huevera');
@@ -59,22 +60,22 @@ function crea () {
 	
 	huevera_d = this.add.image(100, 112, 'huevera');
 	huevera_d.setScale(HV_scale);
-	huevera_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
+	huevera_d.setTint (Phaser.Display.Color.GetColor (255, 154, 0));
 
 //huevos crear
 	huevo_b = this.add.image(700, 50, 'huevo_b');
 	huevo_b.setScale(H_scale);
 	huevo_b.setInteractive();
 	
-	huevo_m = this.add.image(500, 50, 'huevo_b');
+	huevo_m = this.add.image(600, 50, 'huevo_b');
 	huevo_m.setScale(H_scale);
 	huevo_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
 	huevo_m.setInteractive();
 	
 	
-	huevo_d = this.add.image(300, 50, 'huevo_b');
+	huevo_d = this.add.image(500, 50, 'huevo_b');
 	huevo_d.setScale(H_scale);
-	huevo_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
+	huevo_d.setTint (Phaser.Display.Color.GetColor (255, 154, 0));
 	huevo_d.setInteractive();
 	
 //Interaccion huevos
