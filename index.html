@@ -65,30 +65,46 @@ function crea () {
 //huevos crear
 	huevo_b = this.add.image(700, 50, 'huevo_b');
 	huevo_b.setScale(H_scale);
-	huevo_b.setInteractive();
+	huevo_b.setInteractive({draggable:true});
 	
+
 	huevo_m = this.add.image(600, 50, 'huevo_b');
 	huevo_m.setScale(H_scale);
 	huevo_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
-	huevo_m.setInteractive();
+	huevo_m.setInteractive({draggable:true});
 	
 	
 	huevo_d = this.add.image(500, 50, 'huevo_b');
 	huevo_d.setScale(H_scale);
 	huevo_d.setTint (Phaser.Display.Color.GetColor (255, 154, 0));
-	huevo_d.setInteractive();
+	huevo_d.setInteractive({draggable:true});
 	
 //Interaccion huevos
 		huevo_b.on('pointerdown', function () {
-			console.log('Clicado huevo de color blanco');
+		console.log('Clicado huevo de color blanco');
+		this.setScale(.7);
 		});
+
+		this.input.on('drag', function (pointer, object, x, y) {
+			object.x = x;
+			object.y = y;
+		
+			if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())) {
+				console.log('huevo dentro huevera');
+			}
+		});
+
+		this.input.on('dragend', function (pointer, object, x, y){
+			object.setScale(H_scale); });
 
 		huevo_m.on('pointerdown', function () {
 			console.log('Clicado huevo de color marrón');
+			this.setScale(.7);
 		});
 
 		huevo_d.on('pointerdown', function () {
 			console.log('Clicado huevo de color dorado');
+			this.setScale(.7);
 		});
 
 //se indica que flechas es un input del teclado
