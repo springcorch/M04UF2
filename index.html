@@ -28,6 +28,9 @@ let game = new Phaser.Game(config);
 let huevera_b, huevera_m, huevera_d;
 let huevo_b, huevo_m, huevo_d; 
 
+let H_scale = .5;
+let HV_scale = .1;
+
 function precarga () {
 	//this.load.image('huevo', 'graficos/huevo.png');
 
@@ -48,39 +51,44 @@ function crea () {
 
 //hueveras crear
 	huevera_b = this.add.image(100, 337, 'huevera');
-	huevera_b.setScale(.1);
+	huevera_b.setScale(HV_scale);
 
 	huevera_m = this.add.image(100, 225, 'huevera');
-	huevera_m.setScale(.1);
+	huevera_m.setScale(HV_scale);
 	huevera_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
 	
 	huevera_d = this.add.image(100, 112, 'huevera');
-	huevera_d.setScale(.1);
+	huevera_d.setScale(HV_scale);
 	huevera_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
 
 //huevos crear
 	huevo_b = this.add.image(700, 50, 'huevo_b');
-	huevo_b.setScale(.5);
+	huevo_b.setScale(H_scale);
 	huevo_b.setInteractive();
 	
 	huevo_m = this.add.image(500, 50, 'huevo_b');
-	huevo_m.setScale(.5);
+	huevo_m.setScale(H_scale);
 	huevo_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
 	huevo_m.setInteractive();
 	
 	
 	huevo_d = this.add.image(300, 50, 'huevo_b');
-	huevo_d.setScale(.5);
+	huevo_d.setScale(H_scale);
 	huevo_d.setTint (Phaser.Display.Color.GetColor (0, 255, 0));
 	huevo_d.setInteractive();
 	
 //Interaccion huevos
-	[huevo_b, huevo_m, huevo_d].forEach((huevo) => {
-		huevo.on("pointerdown", () => {
-			console.log(`Clicado huevo de color`);
+		huevo_b.on('pointerdown', function () {
+			console.log('Clicado huevo de color blanco');
 		});
-	});
 
+		huevo_m.on('pointerdown', function () {
+			console.log('Clicado huevo de color marrón');
+		});
+
+		huevo_d.on('pointerdown', function () {
+			console.log('Clicado huevo de color dorado');
+		});
 
 //se indica que flechas es un input del teclado
 //	flechas = this.input.keyboard.createCursorKeys(); 
