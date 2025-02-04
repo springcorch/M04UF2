@@ -22,7 +22,12 @@ let config = {
 let game = new Phaser.Game(config);
 
 let huevera_b, huevera_m, huevera_d;
+
+//variables de huevo
 let huevo_b, huevo_m, huevo_d;
+let huevoTipos = [];
+let huevos = [];
+let caida = 1;
 
 let canvas_bg;
 
@@ -30,12 +35,8 @@ let H_scale = .5;
 let HV_scale = .1;
 
 function precarga () {
-	//this.load.image('huevo', 'graficos/huevo.png');
-
 	this.load.image('fondo', 'graficos/cespedVerde.jpg');
-
 	this.load.image('huevo_b', 'graficos/huevo_b.png');
-
 	this.load.image('huevera', 'graficos/huevera.png');
 }
 
@@ -56,25 +57,34 @@ function crea () {
 	huevera_d.setTint (Phaser.Display.Color.GetColor (255, 154, 0));
 
 //huevos crear
-	huevo_b = this.add.image(700, 50, 'huevo_b');
-	huevo_b.setScale(H_scale);
-	huevo_b.setInteractive({draggable:true});
-	
+	huevo_b = this.add.image(-999, -999, 'huevo_b');
+	huevoTipos.push({ huevo: huevo_b });
 
-	huevo_m = this.add.image(600, 50, 'huevo_b');
-	huevo_m.setScale(H_scale);
-	huevo_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
-	huevo_m.setInteractive({draggable:true});
+	huevo_m = this.add.image(-999, -999, 'huevo_b');
+	huevoTipos.push({ huevo: huevo_m, tint: Phaser.Display.Color.GetColor(192,128,16)});
+
+	huevo_d = this.add.image(-999, -999, 'huevo_b');
+	huevoTipos.push({ huevo: huevo_d, tint: Phaser.Display.Color.GetColor(255,154,0)});
 	
-	
-	huevo_d = this.add.image(500, 50, 'huevo_b');
-	huevo_d.setScale(H_scale);
-	huevo_d.setTint (Phaser.Display.Color.GetColor (255, 154, 0));
-	huevo_d.setInteractive({draggable:true});
+	interacionHuevos.call(this, huevo_b, 'blanco');
+	interacionHuevos.call(this, huevo_m, 'marron');
+	interacionHuevos.call(this, huevo_d, 'dorado');
+
+//Sistema de eventos
+	this.time.addEvent({
+		delay: 1000,
+		callback: spawnHuevo,
+		callbackScope: this,
+		loop: true
+	});
+}
+
+
 
 //Interaccion huevos
-		huevo_b.on('pointerdown', function () {
-		console.log('Clicado huevo de color blanco');
+function interacionHuevos(huevo, color) {
+		huevo.on('pointerdown', function () {
+		console.log(`Clicado huevo de color ${color}`);
 		this.setScale(.7);
 		});
 
@@ -89,18 +99,36 @@ function crea () {
 
 		this.input.on('dragend', function (pointer, object, x, y){
 			object.setScale(H_scale); });
+}
 
-		huevo_m.on('pointerdown', function () {
-			console.log('Clicado huevo de color marrón');
-			this.setScale(.7); });
+//Spawn huevos
+function spawnHuevo(){
+	let huevoRand = Phaser.Utils.Array.GetRandom(huevoTipos);
+	let x = Phaser.Math.Between(350, 700);
+	let huevo = this.add.image(x, 0, huevoRand.huevo.texture.key).setScale(H_scale);
+	huevo.setTint(huevoRand.tint);
+	huevo.setInteractive({ draggable: true })
+	
+	huevos.push(huevo);
 
-		huevo_d.on('pointerdown', function () {
-			console.log('Clicado huevo de color dorado');
-			this.setScale(.7); });
+	if(huevoRand.huevo === huevo_b){
+		interacionHuevos.call(this, huevo, 'blanco');
+	}else if(huevoRand.huevo === huevo_m){
+		interacionHuevos.call(this, huevo, 'marron');
+	}else if(huevoRand.huevo === huevo_d){
+		interacionHuevos.call(this, huevo, 'dorado');
+	}
 }
 
 function actualiza () {
-	
+	for(let i = huevos.length - 1; i >= 0; i--){
+		let huevo = huevos[i];
+		huevo.y += caida;
+		if(huevo.y > canvas_y) {
+			huevo.destroy();
+			huevos.splice(i, 1);
+		}
+	}
 }
 		</script>
 	</head>
