@@ -104,7 +104,7 @@ function interacionHuevos(huevo, color) {
 //Spawn huevos
 function spawnHuevo(){
 	let huevoRand = Phaser.Utils.Array.GetRandom(huevoTipos);
-	let x = Phaser.Math.Between(350, 700);
+	let x = Phaser.Math.Between(350, 650);
 	let huevo = this.add.image(x, 0, huevoRand.huevo.texture.key).setScale(H_scale);
 	huevo.setTint(huevoRand.tint);
 	huevo.setInteractive({ draggable: true })
