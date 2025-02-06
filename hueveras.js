@@ -29,10 +29,25 @@ let contador;
 let H_scale = .5;
 let HV_scale = .1;
 
+//variables de audio
+let gameplay;
+let gameover;
+let grab;
+let correct;
+let incorrect;
+
 function precarga () {
+//imagenes
 	this.load.image('fondo', 'graficos/cespedVerde.jpg');
 	this.load.image('huevo_b', 'graficos/huevo_b.png');
 	this.load.image('huevera', 'graficos/huevera.png');
+
+//audios
+	this.load.audio('gameplay',['sounds/gameplay.wav']);
+	this.load.audio('gameover',['sounds/gameover.mp3']);
+	this.load.audio('grabegg',['sounds/grabegg.wav']);
+	this.load.audio('correct',['sounds/correct.wav']);
+	this.load.audio('incorrect',['sounds/incorrect.wav']);
 }
 
 function crea () {
@@ -65,6 +80,20 @@ function crea () {
 	interacionHuevos.call(this, huevo_m, 'marron');
 	interacionHuevos.call(this, huevo_d, 'dorado');
 
+//audios crear
+	gameplay = this.sound.add('gameplay');
+	gameplay.setLoop(true);
+	gameplay.setVolume(0.5);
+	gameover = this.sound.add('gameover');
+	gameover.setLoop(true);
+	gameover.setVolume(0.5);
+	grab = this.sound.add('grabegg');
+	correct = this.sound.add('correct');
+	incorrect = this.sound.add('incorrect');
+
+//play gameplay al inciar juego
+	gameplay.play();
+
 //contador crear
 		contador = this.add.text(725, 15, minuto, {"fontSize": 48, "fontStyle": "bold"});
 
@@ -83,6 +112,8 @@ interval_contador = setInterval(function () {
 	contador.setText(minuto);
 	if (minuto <= 0){
 		console.log("Game Over");
+		gameplay.pause();
+		gameover.play();
 		clearInterval(interval_contador);
 		return;
 	}
@@ -91,6 +122,7 @@ interval_contador = setInterval(function () {
 //Interaccion huevos
 function interacionHuevos(huevo, color) {
 		huevo.on('pointerdown', function () {
+		grab.play();
 		console.log(`Clicado huevo de color ${color}`);
 		this.setScale(.7);
 		});
@@ -98,13 +130,16 @@ function interacionHuevos(huevo, color) {
 		this.input.on('drag', function (pointer, object, x, y) {
 			object.x = x;
 			object.y = y;
-		
-			if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())) {
-				console.log('huevo dentro huevera'); 
-			}
 		});
 
 		this.input.on('dragend', function (pointer, object, x, y){
+			if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())) {
+				console.log('huevo dentro huevera');
+				correct.play();
+			}
+			else {
+				incorrect.play();
+			}
 			object.setScale(H_scale); });
 }
 
