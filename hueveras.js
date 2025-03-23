@@ -45,9 +45,9 @@ function crear() {
     huevera_d = this.add.image(100, 112, 'huevera').setScale(HV_scale).setTint(Phaser.Display.Color.GetColor(255, 154, 0));
     
     huevoTipos = [
-        { key: 'huevo_b', tint: null, color: 'blanco' },
-        { key: 'huevo_b', tint: Phaser.Display.Color.GetColor(192, 128, 16), color: 'marron' },
-        { key: 'huevo_b', tint: Phaser.Display.Color.GetColor(255, 154, 0), color: 'dorado' }
+        { key: 'huevo_b', tint: null, color: 'blanco', cesta: huevera_b },
+        { key: 'huevo_b', tint: Phaser.Display.Color.GetColor(192, 128, 16), color: 'marron', cesta: huevera_m },
+        { key: 'huevo_b', tint: Phaser.Display.Color.GetColor(255, 154, 0), color: 'dorado', cesta: huevera_d }
     ];
     
     gameplay = this.sound.add('gameplay', { loop: true, volume: 0.5 });
@@ -69,7 +69,7 @@ function actualizarTiempo() {
     }
 }
 
-function interaccionHuevos(huevo, color) {
+function interaccionHuevos(huevo, tipo) {
     huevo.setInteractive({ draggable: true });
     huevo.on('pointerdown', function () {
         grab.play();
@@ -82,12 +82,14 @@ function interaccionHuevos(huevo, color) {
     });
 
     this.input.on('dragend', function (pointer, object) {
-        if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())) {
+        if (Phaser.Geom.Intersects.RectangleToRectangle(tipo.cesta.getBounds(), object.getBounds())) {
             correct.play();
+            object.destroy();
+            huevos.splice(huevos.indexOf(object), 1);
         } else {
             incorrect.play();
+            object.setScale(H_scale);
         }
-        object.setScale(H_scale);
     });
 }
 
@@ -99,7 +101,7 @@ function spawnHuevo() {
     if (huevoRand.tint) huevo.setTint(huevoRand.tint);
     huevo.setInteractive({ draggable: true });
     huevos.push(huevo);
-    interaccionHuevos.call(this, huevo, huevoRand.color);
+    interaccionHuevos.call(this, huevo, huevoRand);
 }
 
 function actualizar() {
