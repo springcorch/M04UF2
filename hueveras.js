@@ -27,15 +27,15 @@ let gameplay, gameover, grab, correct, incorrect;
 let juegoTerminado = false;
 
 function precargar() {
-    this.load.image('fondo', 'background.png');
-    this.load.image('huevo_b', 'egg_white.png');
-    this.load.image('huevera', 'basket.png');
+    this.load.image('fondo', 'graficos/cespedVerde.jpg');
+    this.load.image('huevo_b', 'graficos/huevo_b.png');
+    this.load.image('huevera', 'graficos/huevera.png');
     
-    this.load.audio('gameplay', ['gameplay.wav']);
-    this.load.audio('gameover', ['gameover.mp3']);
-    this.load.audio('grabegg', ['grabegg.wav']);
-    this.load.audio('correct', ['correct.wav']);
-    this.load.audio('incorrect', ['incorrect.wav']);
+    this.load.audio('gameplay', ['sounds/gameplay.wav']);
+    this.load.audio('gameover', ['sounds/gameover.mp3']);
+    this.load.audio('grabegg', ['sounds/grabegg.wav']);
+    this.load.audio('correct', ['sounds/correct.wav']);
+    this.load.audio('incorrect', ['sounds/incorrect.wav']);
 }
 
 function crear() {
