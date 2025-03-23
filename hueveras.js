@@ -2,174 +2,126 @@ let canvas_w = 800;
 let canvas_y = 450;
 
 let config = {
-	width: canvas_w,
-	height: canvas_y,
-	scene: {
-		preload: precarga,
-		create: crea,
-		update: actualiza
-		}
-	};
+    width: canvas_w,
+    height: canvas_y,
+    scene: {
+        preload: precargar,
+        create: crear,
+        update: actualizar
+    }
+};
 
-let game = new Phaser.Game(config);
+let juego = new Phaser.Game(config);
 
 let huevera_b, huevera_m, huevera_d;
-
-//variables de huevo
-let huevo_b, huevo_m, huevo_d;
 let huevoTipos = [];
 let huevos = [];
 let caida = 1;
-
 let canvas_bg;
-
 let minuto = 60;
 let contador;
+let H_scale = 0.5;
+let HV_scale = 0.1;
 
-let H_scale = .5;
-let HV_scale = .1;
+let gameplay, gameover, grab, correct, incorrect;
+let juegoTerminado = false;
 
-//variables de audio
-let gameplay;
-let gameover;
-let grab;
-let correct;
-let incorrect;
-
-function precarga () {
-//imagenes
-	this.load.image('fondo', 'graficos/cespedVerde.jpg');
-	this.load.image('huevo_b', 'graficos/huevo_b.png');
-	this.load.image('huevera', 'graficos/huevera.png');
-
-//audios
-	this.load.audio('gameplay',['sounds/gameplay.wav']);
-	this.load.audio('gameover',['sounds/gameover.mp3']);
-	this.load.audio('grabegg',['sounds/grabegg.wav']);
-	this.load.audio('correct',['sounds/correct.wav']);
-	this.load.audio('incorrect',['sounds/incorrect.wav']);
+function precargar() {
+    this.load.image('fondo', 'background.png');
+    this.load.image('huevo_b', 'egg_white.png');
+    this.load.image('huevera', 'basket.png');
+    
+    this.load.audio('gameplay', ['gameplay.wav']);
+    this.load.audio('gameover', ['gameover.mp3']);
+    this.load.audio('grabegg', ['grabegg.wav']);
+    this.load.audio('correct', ['correct.wav']);
+    this.load.audio('incorrect', ['incorrect.wav']);
 }
 
-function crea () {
-//fondo crear
-	canvas_bg = this.add.image(canvas_w/2, canvas_y/2, 'fondo');
-
-//hueveras crear
-	huevera_b = this.add.image(100, 337, 'huevera');
-	huevera_b.setScale(HV_scale);
-
-	huevera_m = this.add.image(100, 225, 'huevera');
-	huevera_m.setScale(HV_scale);
-	huevera_m.setTint (Phaser.Display.Color.GetColor (192, 128, 16));
-	
-	huevera_d = this.add.image(100, 112, 'huevera');
-	huevera_d.setScale(HV_scale);
-	huevera_d.setTint (Phaser.Display.Color.GetColor (255, 154, 0));
-
-//huevos crear
-	huevo_b = this.add.image(-999, -999, 'huevo_b');
-	huevoTipos.push({ huevo: huevo_b });
-
-	huevo_m = this.add.image(-999, -999, 'huevo_b');
-	huevoTipos.push({ huevo: huevo_m, tint: Phaser.Display.Color.GetColor(192,128,16)});
-
-	huevo_d = this.add.image(-999, -999, 'huevo_b');
-	huevoTipos.push({ huevo: huevo_d, tint: Phaser.Display.Color.GetColor(255,154,0)});
-	
-	interacionHuevos.call(this, huevo_b, 'blanco');
-	interacionHuevos.call(this, huevo_m, 'marron');
-	interacionHuevos.call(this, huevo_d, 'dorado');
-
-//audios crear
-	gameplay = this.sound.add('gameplay');
-	gameplay.setLoop(true);
-	gameplay.setVolume(0.5);
-	gameover = this.sound.add('gameover');
-	gameover.setLoop(true);
-	gameover.setVolume(0.5);
-	grab = this.sound.add('grabegg');
-	correct = this.sound.add('correct');
-	incorrect = this.sound.add('incorrect');
-
-//play gameplay al inciar juego
-	gameplay.play();
-
-//contador crear
-		contador = this.add.text(725, 15, minuto, {"fontSize": 48, "fontStyle": "bold"});
-
-//Sistema de eventos
-	this.time.addEvent({
-		delay: 1000,
-		callback: spawnHuevo,
-		callbackScope: this,
-		loop: true
-	});
+function crear() {
+    canvas_bg = this.add.image(canvas_w / 2, canvas_y / 2, 'fondo');
+    huevera_b = this.add.image(100, 337, 'huevera').setScale(HV_scale);
+    huevera_m = this.add.image(100, 225, 'huevera').setScale(HV_scale).setTint(Phaser.Display.Color.GetColor(192, 128, 16));
+    huevera_d = this.add.image(100, 112, 'huevera').setScale(HV_scale).setTint(Phaser.Display.Color.GetColor(255, 154, 0));
+    
+    huevoTipos = [
+        { key: 'huevo_b', tint: null, color: 'blanco' },
+        { key: 'huevo_b', tint: Phaser.Display.Color.GetColor(192, 128, 16), color: 'marron' },
+        { key: 'huevo_b', tint: Phaser.Display.Color.GetColor(255, 154, 0), color: 'dorado' }
+    ];
+    
+    gameplay = this.sound.add('gameplay', { loop: true, volume: 0.5 });
+    gameover = this.sound.add('gameover', { loop: false, volume: 0.5 });
+    grab = this.sound.add('grabegg');
+    correct = this.sound.add('correct');
+    incorrect = this.sound.add('incorrect');
+    
+    gameplay.play();
+    contador = this.add.text(725, 15, minuto, { fontSize: '48px', fontStyle: 'bold' });
 }
 
-let interval_contador;
-interval_contador = setInterval(function () {
-	minuto--;
-	contador.setText(minuto);
-	if (minuto <= 0){
-		console.log("Game Over");
-		gameplay.pause();
-		gameover.play();
-		clearInterval(interval_contador);
-		return;
-	}
-}, 1000);
-
-//Interaccion huevos
-function interacionHuevos(huevo, color) {
-		huevo.on('pointerdown', function () {
-		grab.play();
-		console.log(`Clicado huevo de color ${color}`);
-		this.setScale(.7);
-		});
-
-		this.input.on('drag', function (pointer, object, x, y) {
-			object.x = x;
-			object.y = y;
-		});
-
-		this.input.on('dragend', function (pointer, object, x, y){
-			if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())) {
-				console.log('huevo dentro huevera');
-				correct.play();
-			}
-			else {
-				incorrect.play();
-			}
-			object.setScale(H_scale); });
+function actualizarTiempo() {
+    if (juegoTerminado) return;
+    minuto--;
+    contador.setText(minuto);
+    if (minuto <= 0) {
+        finalizarJuego.call(this);
+    }
 }
 
-//Spawn huevos
-function spawnHuevo(){
-	let huevoRand = Phaser.Utils.Array.GetRandom(huevoTipos);
-	let x = Phaser.Math.Between(350, 650);
-	let huevo = this.add.image(x, 0, huevoRand.huevo.texture.key).setScale(H_scale);
-	huevo.setTint(huevoRand.tint);
-	huevo.setInteractive({ draggable: true })
-	
-	huevos.push(huevo);
+function interaccionHuevos(huevo, color) {
+    huevo.setInteractive({ draggable: true });
+    huevo.on('pointerdown', function () {
+        grab.play();
+        this.setScale(0.7);
+    });
 
-	if(huevoRand.huevo === huevo_b){
-		interacionHuevos.call(this, huevo, 'blanco');
-	}else if(huevoRand.huevo === huevo_m){
-		interacionHuevos.call(this, huevo, 'marron');
-	}else if(huevoRand.huevo === huevo_d){
-		interacionHuevos.call(this, huevo, 'dorado');
-	}
+    this.input.on('drag', function (pointer, object, x, y) {
+        object.x = x;
+        object.y = y;
+    });
+
+    this.input.on('dragend', function (pointer, object) {
+        if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())) {
+            correct.play();
+        } else {
+            incorrect.play();
+        }
+        object.setScale(H_scale);
+    });
 }
 
-function actualiza () {
-	for(let i = huevos.length - 1; i >= 0; i--){
-		let huevo = huevos[i];
-		huevo.y += caida;
-		if(huevo.y > canvas_y) {
-			huevo.destroy();
-			huevos.splice(i, 1);
-		}
-	}
+function spawnHuevo() {
+    if (juegoTerminado) return;
+    let huevoRand = Phaser.Utils.Array.GetRandom(huevoTipos);
+    let x = Phaser.Math.Between(350, 650);
+    let huevo = this.add.image(x, 0, huevoRand.key).setScale(H_scale);
+    if (huevoRand.tint) huevo.setTint(huevoRand.tint);
+    huevo.setInteractive({ draggable: true });
+    huevos.push(huevo);
+    interaccionHuevos.call(this, huevo, huevoRand.color);
 }
 
+function actualizar() {
+    if (juegoTerminado) return;
+    for (let i = huevos.length - 1; i >= 0; i--) {
+        let huevo = huevos[i];
+        huevo.y += caida;
+        if (huevo.y > canvas_y) {
+            huevo.destroy();
+            huevos.splice(i, 1);
+        }
+    }
+}
+
+function finalizarJuego() {
+    juegoTerminado = true;
+    gameplay.stop();
+    gameover.play();
+    
+    this.add.rectangle(canvas_w / 2, canvas_y / 2, 400, 200, 0x000000, 0.8);
+    this.add.text(canvas_w / 2, canvas_y / 2 - 50, 'Game Over', { fontSize: '48px', fill: '#ffffff' }).setOrigin(0.5);
+    this.add.text(canvas_w / 2, canvas_y / 2, `Puntuación: ${huevos.length}`, { fontSize: '32px', fill: '#ffffff' }).setOrigin(0.5);
+    
+    this.input.enabled = false;
+}
